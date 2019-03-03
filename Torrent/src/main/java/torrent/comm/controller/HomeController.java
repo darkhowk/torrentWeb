@@ -69,14 +69,42 @@ public class HomeController {
 		
 		List<TorrentStatus> list = tc.getAllTorrents();
 		
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		ArrayList<String> data = new ArrayList<String>();
+		ArrayList<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
 		for(TorrentStatus item : list) {
-			System.out.println(item.getName());
-			data.add(item.getName());
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("NAME", item.getName());
+			// item.STATUS_CHECK_WAIT == 1
+			// item.STATUS_CHECKING == 2
+			// item.STATUS_DOWNLOADING == 4	
+			// item.STATUS_FINISHED == 16
+			// item.STATUS_SEEDING == 16
+			// SUCC === 6
+			String state = "";
+			
+			if (item.getStatus() == item.STATUS_CHECK_WAIT) {
+				state = "STATUS_CHECK_WAIT";
+			}
+			if (item.getStatus() == item.STATUS_CHECK_WAIT) {
+				state = "STATUS_CHECK_WAIT";
+			}
+			if (item.getStatus() == item.STATUS_DOWNLOADING) {
+				state = "STATUS_DOWNLOADING";
+			}
+			if (item.getStatus() == item.STATUS_FINISHED) {
+				state = "STATUS_FINISHED";
+			}
+			if (item.getStatus() == item.STATUS_SEEDING) {
+				state = "STATUS_SEEDING";
+			}
+			if (item.getStatus() == 6) {
+				state = "SUCC";
+			}
+			
+			map.put("STATE", state);
+			data.add(map);
 		}
 		
-		mv.addObject("torrent", data);
+		mv.addObject("data", data);
 		return mv;
 	}
 	/**

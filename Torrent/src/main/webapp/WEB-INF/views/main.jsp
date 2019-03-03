@@ -249,11 +249,12 @@
                   </tr>
                 </thead>
                 <tbody>
-                	<c:forEach items="${torrent }" var="list">
-                	<tr>
-			         	 <td>${ list }</td>
-          			</tr>
-					</c:forEach>
+                	<c:forEach  items="${data}" var="list" varStatus="i">
+	                	<tr>
+				         	 <td>${list.NAME}</td>
+				         	 <td>${list.STATE}</td>
+	          			</tr>
+                	</c:forEach>
                 </tbody>
               </table>
             </div>
