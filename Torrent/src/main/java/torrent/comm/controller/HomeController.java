@@ -3,6 +3,7 @@ package torrent.comm.controller;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
@@ -14,6 +15,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.annotation.Resource;
 
 import org.json.JSONException;
 import org.jsoup.Connection;
@@ -27,9 +30,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import ca.benow.transmission.TransmissionClient;
 import ca.benow.transmission.model.TorrentStatus;
+import torrent.comm.service.HomeService;
 
 /**
  * Handles requests for the application home page.
@@ -39,26 +44,45 @@ public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
+	@Resource(name="homeService")
+	private HomeService homeService;
+	
 	/**
 	 * Simply selects the home view to render by returning its name.
+	 * @throws JSONException 
+	 * @throws IOException 
 	 */
 	@RequestMapping(value = "main", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
+	public ModelAndView home(Locale locale, Model model) throws IOException, JSONException {
+		
+		ModelAndView mv = new ModelAndView("main");
 		Date date = new Date();
 		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
 		
 		String formattedDate = dateFormat.format(date);
 		
 		model.addAttribute("serverTime", formattedDate );
-		
-		System.out.println("Test ");
+
 		// 메뉴 리스트 == 실행 리스트
+	//	List<HashMap<String, Object>> a = homeService.getMenuList();
+		//mv.addObject("list" , a);
 		
-		// 받은 프로그램 현황
 		
+		URL url = new URL("http://memorandum.tk:9091/transmission/rpc/");
+
+		TransmissionClient tc = new TransmissionClient(url);
 		
+		List<TorrentStatus> list = tc.getAllTorrents();
 		
-		return "main";
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		ArrayList<String> data = new ArrayList<String>();
+		for(TorrentStatus item : list) {
+			System.out.println(item.getName());
+			data.add(item.getName());
+		}
+		
+		mv.addObject("torrent", data);
+		return mv;
 	}
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -160,9 +184,9 @@ public class HomeController {
 		
 		List<TorrentStatus> list = tc.getAllTorrents();
 		
+		
 		for (TorrentStatus item : list) {
 			System.out.println(item.getName());
-			
 		}
 		
 		return "main";

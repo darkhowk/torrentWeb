@@ -11,10 +11,24 @@
 	</appender>
 	
 	<!-- Application Loggers -->
-	<logger name="torrent.comm.controller">
-		<level value="info" />
-	</logger>
-	
+	<!-- <logger name="comm.util.advice">
+        <level value="info" />
+    </logger>
+    -->
+     <!-- Query Loggers -->
+    <logger name="jdbc.sqlonly" additivity="false"> 
+        <level value="info"/> 
+        <appender-ref ref="console"/> 
+    </logger>
+    <logger name="jdbc.sqltiming" additivity="false"> 
+	    <level value="info"/> 
+	    <appender-ref ref="console"/> 
+    </logger> 
+    <logger name="jdbc.resultsettable" additivity="false"> 
+        <level value="info"/> 
+        <appender-ref ref="console"/> 
+    </logger> 
+
 	<!-- 3rdparty Loggers -->
 	<logger name="org.springframework.core">
 		<level value="info" />
@@ -34,7 +48,7 @@
 
 	<!-- Root Logger -->
 	<root>
-		<priority value="warn" />
+		<priority value="info" />
 		<appender-ref ref="console" />
 	</root>
 	
