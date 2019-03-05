@@ -47,9 +47,9 @@ public class MainController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 * @throws JSONException 
-	 * @throws IOException 
+	 * @throws IOException value = {"login.do", "login2.do"} )
 	 */
-	@RequestMapping(value = "main", method = RequestMethod.GET)
+	@RequestMapping(value = {"main", "/"}, method = RequestMethod.GET)
 	public ModelAndView home(Locale locale, Model model) throws IOException, JSONException {
 		System.out.println("Main");
 		ModelAndView mv = new ModelAndView("main");
